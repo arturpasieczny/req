@@ -1,0 +1,183 @@
+@startuml
+
+class Deal {
+name
+stage
+close date
+amount
+probability
+last activity date
+}
+
+class User {
+name
+email
+}
+
+class Company {
+name
+address
+domain
+size
+description
+}
+
+class Contact {
+first name
+last name
+job title
+email
+phone
+owner
+}
+
+enum Deal_Stage {
+wysłany kontakt
+zamknięte pomyślnie
+zamknięte niepomyslnie
+}
+
+enum Deal_Type {
+New Business
+Exisiting Business
+}
+
+class Pipeline {
+name
+}
+
+class Stage {
+name
+probability
+editing access
+update properties
+}
+
+class Ticket {
+name
+status
+}
+
+class Communication {
+?
+}
+
+class Attachment {
+document
+}
+
+class LineItem {
+name
+sku
+billing start date
+billing frequency
+quantity
+unit price
+unit discount
+net price
+}
+
+class Playbook {
+?
+}
+
+class Quote {
+?
+}
+
+class Activity {
+type
+description
+date
+}
+
+class Comment {
+description
+timestamp
+}
+
+class Note {
+description
+}
+
+class Email {
+topic
+message
+}
+
+class Call {
+outcome
+direction
+time
+}
+
+class Task {
+due date
+priority
+notes
+}
+
+class Meeting {
+outcome
+duration
+}
+
+class View{
+}
+
+class TabularView{
+sorting
+filter
+columns
+}
+
+class DashboardView{
+filter
+}
+
+View <|-- DashboardView
+View <|-- TabularView
+
+View "0..*" --> "0..*" Deal : lists
+
+Call "0..*" --> "0..*" Contact : contacts
+Email "0..*" --> "0..*" Contact : contacts
+Meeting "0..*" <-- "0..*" Contact : attends
+
+User "0..1" -->  "0..*" Deal : owns
+User "0..1" --> "0..*" Contact : owns
+User "0..1" --> "0..*" Company : owns
+User "0..1" --> "0..*" Ticket : owns
+User "0..1" --> "0..*" Activity : performs
+User "1" --> "0..*" Comment : makes
+
+User "0..1" <-- "0..*" Task : is assigned
+
+Company "0..*" -- "0..*" Deal
+Company "0..*" -- "0..*" Contact
+Contact "0..*" -- "0..*" Deal
+Ticket "0..*" -- "1" Deal
+
+Deal "0..*" -- "1" Deal_Stage
+Deal "0..*" -- "0..1" Deal_Type
+Deal "0..*" -- "1" Pipeline
+Deal "1" -- "0..*" Communication
+Deal "1" -- "0..*" Attachment
+Deal "1" -- "0..*" Playbook
+Deal "1" -- "0..*" Quote
+Deal "1" --> "0..*" LineItem : contains
+Deal "1" -- "0..*" Activity
+
+Ticket "0..*" -- "0..*" Contact
+Ticket "0..*" -- "0..*" Comtact
+
+Pipeline "1" *-- "0..*" Stage
+
+Note "0..1" -- "0..*" Attachment
+Activity "1" -- "0..*" Comment
+Activity <|-- Note
+Activity <|-- Task
+Activity <|-- Call
+Activity <|-- Email
+Activity <|-- Meeting
+@enduml
